@@ -1,0 +1,94 @@
+/*
+SQLyog Community v13.3.0 (64 bit)
+MySQL - 8.0.43 : Database - lms
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+USE `lms`;
+
+/*Table structure for table `control_account` */
+
+CREATE TABLE `control_account` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `account_code` varchar(10) NOT NULL,
+  `account_name` varchar(255) NOT NULL,
+  `category` enum('ASSET','LIABILITY','EQUITY','INCOME','EXPENSE') DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `sub_account_id` int DEFAULT NULL,
+  `currency_id` int DEFAULT NULL,
+  `balance` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_code` (`account_code`),
+  UNIQUE KEY `account_name` (`account_name`),
+  KEY `sub_account_id` (`sub_account_id`),
+  KEY `currency_id` (`currency_id`),
+  CONSTRAINT `control_account_ibfk_2` FOREIGN KEY (`sub_account_id`) REFERENCES `control_account` (`id`),
+  CONSTRAINT `control_account_ibfk_3` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `control_account` */
+
+insert  into `control_account`(`id`,`account_code`,`account_name`,`category`,`description`,`sub_account_id`,`currency_id`,`balance`) values 
+(1,'1005','LoanReceivable','ASSET','Loans receivables',NULL,1,100.00),
+(3,'1007','CashMpesa','ASSET','Loans receivables',NULL,1,100.00),
+(4,'1008','InterestIncome','INCOME','Interest Income',NULL,1,100.00);
+
+/*Table structure for table `currency` */
+
+CREATE TABLE `currency` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `currency_code` varchar(4) DEFAULT NULL,
+  `Currency_detail` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `currency_code` (`currency_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `currency` */
+
+insert  into `currency`(`id`,`currency_code`,`Currency_detail`) values 
+(1,'KES',NULL),
+(2,'UGX',NULL),
+(3,'USD',NULL);
+
+/*Table structure for table `transactions` */
+
+CREATE TABLE `transactions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `transaction_date` datetime DEFAULT NULL,
+  `doc_no` varchar(100) DEFAULT NULL,
+  `trx_key` varchar(100) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `account_code` varchar(100) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `debit` decimal(10,2) DEFAULT NULL,
+  `credit` decimal(10,2) DEFAULT NULL,
+  `currency_code` varchar(4) DEFAULT NULL,
+  `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `trx_key` (`trx_key`),
+  KEY `currency_id` (`currency_code`),
+  KEY `account_code` (`account_code`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`currency_code`) REFERENCES `currency` (`currency_code`) ON DELETE CASCADE,
+  CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`account_code`) REFERENCES `control_account` (`account_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `transactions` */
+
+insert  into `transactions`(`id`,`transaction_date`,`doc_no`,`trx_key`,`description`,`account_code`,`amount`,`debit`,`credit`,`currency_code`,`created_on`) values 
+(1,'2026-01-16 00:00:00','4556666222','4556666222-1','Loan repayment with interest','1005',15000.00,15000.00,0.00,'KES','2026-01-19 10:26:58'),
+(2,'2026-01-16 00:00:00','4556666228','4556666228-1','Loan repayment with interest','1007',NULL,1200.00,0.00,'KES','2026-01-19 10:59:36'),
+(3,'2026-01-16 00:00:00','4556666228','4556666228-2','Loan repayment with interest','1005',NULL,0.00,1000.00,'KES','2026-01-19 10:59:36'),
+(4,'2026-01-16 00:00:00','4556666228','4556666228-3','Loan repayment with interest','1008',NULL,0.00,200.00,'KES','2026-01-19 10:59:36');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
