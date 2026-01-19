@@ -5,6 +5,7 @@ Available Endpoints
 Request Details
 1. ADD ACCOUNT
 Endpoint: POST http://127.0.0.1:8083/ledger/v1/accounts
+sample payload:
 {
     "accountCode": "1008",
     "accountName": "InterestIncome",
@@ -17,6 +18,7 @@ Endpoint: POST http://127.0.0.1:8083/ledger/v1/accounts
 Creates a new account
 3. ADD TRANSACTION
 Endpoint: POST http://127.0.01:8083/ledger/v1/transaction
+sample payload:
 {
     "transactiondate": "2026-01-16",
     "doc_no": "4556666228",
@@ -47,6 +49,7 @@ Records a new transaction in the ledger.
 
 5. GET TRANSACTION HISTORY
 Endpoint: POST http://127.0.01:8083/ledger/v1/trxhistory
+sample payload:
 {
     "accountCode": "1005",
     "startDate": "2026-01-01",
