@@ -1,5 +1,5 @@
 # LMS_ledger_api
-Included is the LMS Database Included 
+LMS Database File Included. 
 
 Available Endpoints
 Request Details
