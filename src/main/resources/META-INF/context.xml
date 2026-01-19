@@ -1,0 +1,12 @@
+<Context>
+    <Resource name="jdbc/MyDataSource"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3307/dairy_test_db"
+              username="root"
+              password="root"
+              maxTotal="20"
+              maxIdle="10"
+              maxWaitMillis="-1"/>
+</Context>
